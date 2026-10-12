@@ -1,0 +1,7 @@
+CREATE TABLE products
+(
+    id   UUID PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
+
+    sku  VARCHAR(255) NOT NULL UNIQUE CHECK (sku = UPPER(sku)),
+    name VARCHAR(255) NOT NULL
+);
