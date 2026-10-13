@@ -1,5 +1,7 @@
 package dev.m1stwng.stride.product.controller;
 
+import dev.m1stwng.stride.inventory.dto.response.InventoryResponse;
+import dev.m1stwng.stride.inventory.service.InventoryService;
 import dev.m1stwng.stride.product.dto.request.CreateProductRequest;
 import dev.m1stwng.stride.product.dto.request.UpdateProductRequest;
 import dev.m1stwng.stride.product.dto.response.ProductResponse;
@@ -19,6 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProductController {
 
+    private final InventoryService inventoryService;
     private final ProductService productService;
 
     @GetMapping
@@ -29,6 +32,11 @@ public class ProductController {
     @GetMapping("/{id}")
     ResponseEntity<ProductResponse> findById(@PathVariable UUID id) {
         return ResponseEntity.ok(productService.findById(id));
+    }
+
+    @GetMapping("/{id}/inventories")
+    ResponseEntity<Page<InventoryResponse>> findAllInventoriesByProductId(@PathVariable UUID id, Pageable pageable) {
+        return ResponseEntity.ok(inventoryService.findAllByProductId(id, pageable));
     }
 
     @PostMapping

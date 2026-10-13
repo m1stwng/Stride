@@ -1,13 +1,14 @@
 package dev.m1stwng.stride.warehouse.controller;
 
+import dev.m1stwng.stride.inventory.dto.response.InventoryResponse;
+import dev.m1stwng.stride.inventory.service.InventoryService;
 import dev.m1stwng.stride.warehouse.dto.response.LocationResponse;
 import dev.m1stwng.stride.warehouse.service.LocationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -16,7 +17,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LocationController {
 
+    private final InventoryService inventoryService;
     private final LocationService locationService;
+
+    @GetMapping("/{id}/inventories")
+    ResponseEntity<Page<InventoryResponse>> findAllInventoriesByLocationId(@PathVariable UUID id, Pageable pageable) {
+        return ResponseEntity.ok(inventoryService.findAllByLocationId(id, pageable));
+    }
 
     @DeleteMapping("/{id}")
     ResponseEntity<LocationResponse> delete(@PathVariable UUID id) {
