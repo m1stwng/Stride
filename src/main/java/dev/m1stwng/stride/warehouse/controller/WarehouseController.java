@@ -1,8 +1,11 @@
 package dev.m1stwng.stride.warehouse.controller;
 
+import dev.m1stwng.stride.warehouse.dto.request.CreateLocationRequest;
 import dev.m1stwng.stride.warehouse.dto.request.CreateWarehouseRequest;
 import dev.m1stwng.stride.warehouse.dto.request.UpdateWarehouseRequest;
+import dev.m1stwng.stride.warehouse.dto.response.LocationResponse;
 import dev.m1stwng.stride.warehouse.dto.response.WarehouseResponse;
+import dev.m1stwng.stride.warehouse.service.LocationService;
 import dev.m1stwng.stride.warehouse.service.WarehouseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class WarehouseController {
 
+    private final LocationService locationService;
     private final WarehouseService warehouseService;
 
     @GetMapping
@@ -30,9 +34,22 @@ public class WarehouseController {
         return ResponseEntity.ok(warehouseService.findById(id));
     }
 
+    @GetMapping("/{id}/locations")
+    ResponseEntity<List<LocationResponse>> findAllLocationsByWarehouseId(@PathVariable UUID id) {
+        return ResponseEntity.ok(locationService.findAllByWarehouseId(id));
+    }
+
     @PostMapping
     ResponseEntity<WarehouseResponse> create(@RequestBody @Valid CreateWarehouseRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(warehouseService.create(request));
+    }
+
+    @PostMapping("/{id}locations")
+    ResponseEntity<LocationResponse> createLocation(
+            @PathVariable UUID id,
+            @RequestBody @Valid CreateLocationRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(locationService.create(id, request));
     }
 
     @PutMapping("/{id}")
