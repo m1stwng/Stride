@@ -1,0 +1,8 @@
+CREATE TABLE suppliers
+(
+    id    UUID PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
+
+    name  VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
+    phone VARCHAR(255)
+);
